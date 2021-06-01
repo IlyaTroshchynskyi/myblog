@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+venv
+.idea
+MyBlog/site.db
+MyBlog/default.jpg
