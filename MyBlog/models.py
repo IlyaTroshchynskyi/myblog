@@ -1,8 +1,15 @@
 from datetime import datetime
-from MyBlog import db
+from MyBlog import db, login_manager
+from flask_login import UserMixin
 
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id): # from doc
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
+    # UserMixin - need to have all methods from class like is_authe
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
