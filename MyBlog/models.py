@@ -1,6 +1,7 @@
 from datetime import datetime
-from MyBlog import db, login_manager
+from MyBlog import db, login_manager, app
 from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 @login_manager.user_loader
@@ -22,6 +23,22 @@ class User(db.Model, UserMixin):
     # lazy = True - определяет когда скл алхимия загружает данные из базы данных. Это означает что она
     # загрузит данные по необходимости за один раз. тоесть если вызвать свойство пост у автора то он
     # загрузит все посты автора
+
+    def get_reset_token(self, expires_in=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmetho
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
