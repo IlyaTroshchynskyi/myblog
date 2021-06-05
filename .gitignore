@@ -4,3 +4,4 @@ venv
 .idea
 MyBlog/site.db
 MyBlog/default.jpg
+MyBlog/__init__.py
